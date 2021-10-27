@@ -34,9 +34,7 @@ public class Empresa {
 
 
 
-	public Collection<Convocatoria> getConvocatorias() {
-		return convocatorias;
-	}
+
 	
 	@OneToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -46,8 +44,6 @@ public class Empresa {
 	@JoinColumn(name = "ubicacion_id", referencedColumnName = "id")
 	private Ubicacion ubicacion;
 
-	@OneToMany(mappedBy = "empresa")
-	private Collection<Convocatoria> convocatorias;
 
 	
 	@Temporal(TemporalType.DATE)
@@ -117,7 +113,7 @@ public class Empresa {
 	}
 	@Override
 	public String toString() {
-		return "Empresa [cantidadEmpleados=" + cantidadEmpleados + ", convocatorias=" + convocatorias + ", direccion="
+		return "Empresa [cantidadEmpleados=" + cantidadEmpleados + ", convocatorias=" + ", direccion="
 				+ direccion + ", fechacreacion=" + fechacreacion + ", id=" + id + ", razonSocial=" + razonSocial
 				+ ", rubro=" + rubro + ", ruc=" + ruc + ", telefono=" + telefono 
 				+ ", usuario=" + usuario + "]";

@@ -90,7 +90,6 @@ public class EmpresaController {
                                     
         if(empresaService.existsById(id)){
             Empresa empresa = empresaService.findById(id);
-            System.out.println(empresa.getConvocatorias().toString());
         }
         return template;
     }

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DondelaborarApplication<dondelaborar>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.springweb.dondelaborar.DondelaborarApplication",
+            "projectName": "dondelaborar",
+            "args": ""
+        }
+    ]
+}
