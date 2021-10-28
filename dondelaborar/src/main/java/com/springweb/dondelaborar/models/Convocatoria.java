@@ -61,8 +61,7 @@ public class Convocatoria {
     private Empresa empresa;
 
 
-    @OneToMany(mappedBy = "convocatoria")
-    private Collection<Postulacion> postulaciones;
+   
 
 
     //prePersist
@@ -182,7 +181,7 @@ public class Convocatoria {
     public String toString() {
         return "Convocatoria [area=" + area + ", cantEmpleados=" + cantEmpleados + ", descripcion=" + descripcion
                 + ", fecha=" + fecha + ", fechaFin=" + fechaFin + ", fechaInicio=" + fechaInicio + ", horario="
-                + horario + ", id=" + id + ", puesto=" + puesto + ", salario=" + salario + "]" + ubicacion.toString();
+                + horario + ", id=" + id + ", puesto=" + puesto + ", salario=" + salario + "]" ;
     }
 
 

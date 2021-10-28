@@ -11,21 +11,24 @@ import com.springweb.dondelaborar.services.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 
 
-@Controller
-@RequestMapping("/persona")
+@RestController
+@RequestMapping("api/persona")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmpleadoController {
 
     @Autowired
@@ -43,16 +46,50 @@ public class EmpleadoController {
 
 
 
-    @GetMapping("/registrar")
-    public String registrarPersona(Map<String,Object> model){
-        Empleado empleado = new Empleado();
-        Usuario usuario = new Usuario();
-        model.put("empleado", empleado);
-        model.put("usuario", usuario);
-        return "./empleado/registrarEmpleado.html";
+    @PostMapping("/guardar")
+    public Empleado guardarPersona(@RequestBody Map<String,String> objeto) throws Exception{
+
+
+        if(!objeto.containsValue(null)){
+
+            if(!usuarioService.existsByCorreo(objeto.get("correo"))){
+            
+                Usuario usuarioReturn = usuarioService.guardarUsuario( validarCampoUsuario(objeto));
+                Empleado empleado = validarCampoPersona(objeto);
+                empleado.setUsuario(usuarioReturn);
+                 return empleadoService.guardarEmpleado(empleado);
+            }
+
+        }
+    
+        
+
+        return null;
+
     }
 
 
+    private Usuario validarCampoUsuario(Map<String,String> objeto) throws Exception{
+        Usuario usuario = new Usuario();
+        usuario.setCorreo(objeto.get("correo"));
+        usuario.setPassword(objeto.get("password"));
+        usuario.setRol(1);
+        usuario.setUrlFoto(objeto.get("urlfoto"));
+        return usuario;
+    }
+
+    private Empleado validarCampoPersona(Map<String,String> objeto) throws Exception{
+       
+        Empleado empleado = new Empleado();
+        empleado.setNombre(objeto.get("nombres"));
+        empleado.setApellidos(objeto.get("apellidos"));
+        empleado.setDni(objeto.get("dni"));
+        empleado.setDomicilio(objeto.get("direccion"));
+        empleado.setTelefono(objeto.get("telefono"));
+        empleado.setGenero(Integer.parseInt(objeto.get("genero")));
+
+        return empleado;
+    }
 
     
     @PostMapping

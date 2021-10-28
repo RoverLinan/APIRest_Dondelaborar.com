@@ -13,4 +13,5 @@ public interface ConvocatoriaService {
     public List<Convocatoria> findAll();
     public List<Convocatoria> findByPuesto(String puesto);
     public List<Convocatoria> findByPuestoAndDepartamento(String puesto, String departamento);
+    public List<Convocatoria> findByEmpresa(Empresa empresa);
 }

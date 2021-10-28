@@ -3,6 +3,7 @@ package com.springweb.dondelaborar.services.implement;
 import java.util.List;
 
 import com.springweb.dondelaborar.models.Convocatoria;
+import com.springweb.dondelaborar.models.Empresa;
 import com.springweb.dondelaborar.repositories.ConvocatoriaRepository;
 import com.springweb.dondelaborar.services.ConvocatoriaService;
 
@@ -31,6 +32,10 @@ public class ConvocatoriaServiceImplement implements ConvocatoriaService {
     public List<Convocatoria> findAll() {
         
         return convocatoriaRepository.findAll();
+    }
+
+    public List<Convocatoria> findByEmpresa(Empresa empresa){
+        return convocatoriaRepository.findByEmpresa(empresa);
     }
 
     @Override
