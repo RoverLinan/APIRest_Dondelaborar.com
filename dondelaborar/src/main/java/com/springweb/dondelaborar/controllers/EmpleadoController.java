@@ -49,7 +49,7 @@ public class EmpleadoController {
     @PostMapping("/guardar")
     public Empleado guardarPersona(@RequestBody Map<String,String> objeto) throws Exception{
 
-
+        System.out.println(objeto);
         if(!objeto.containsValue(null)){
 
             if(!usuarioService.existsByCorreo(objeto.get("correo"))){

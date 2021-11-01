@@ -10,9 +10,11 @@ import java.util.Map;
 
 import com.springweb.dondelaborar.models.Convocatoria;
 import com.springweb.dondelaborar.models.Empresa;
+import com.springweb.dondelaborar.models.Ubicacion;
 import com.springweb.dondelaborar.models.Usuario;
 import com.springweb.dondelaborar.services.ConvocatoriaService;
 import com.springweb.dondelaborar.services.EmpresaService;
+import com.springweb.dondelaborar.services.UbicacionServicio;
 import com.springweb.dondelaborar.services.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class ConvocatoriaController {
 
     @Autowired
     EmpresaService empresaService;
+
+    @Autowired
+    UbicacionServicio ubicacionServicio;
 
     @GetMapping("/all")
     public ArrayList<Convocatoria> getConvocatoriaByUser(@RequestParam("userid") int id){
@@ -83,7 +88,6 @@ public class ConvocatoriaController {
     @GetMapping("/invitado/buscar")
     public ArrayList<Convocatoria> getConvocatoriasInvitado(@RequestParam("puesto") String puesto,@RequestParam("departamento") String departamento){
        
-        
         List<Convocatoria> listaAux;
         List<Convocatoria> listaConvocatorias = new ArrayList<>();
 
@@ -103,6 +107,8 @@ public class ConvocatoriaController {
             }
         }
 
+        System.out.println(listaConvocatorias) ;
+
         return (ArrayList<Convocatoria>) listaConvocatorias;
 
     }
@@ -110,28 +116,48 @@ public class ConvocatoriaController {
 
 
 
-
-
-
-
-
-
-
-
     @PostMapping("/guardar")
     public Convocatoria guardarConvocatoria(@RequestBody Map<String,String> objeto)throws Exception{
         System.out.println(objeto);
+        if(objeto.containsKey(null)){
+            return null;
+        }
+        Usuario usuarioReturn = null;
+        Ubicacion ubicacionReturn;
+        Empresa empresaReturn;
+        Convocatoria convocatoriaReturn = null;
+
         Convocatoria convocatoria = validarCampos(objeto);
-        System.out.println(convocatoria);
-        if(convocatoria != null){
-            Empresa empresa = empresaService.findById(Integer.parseInt(objeto.get("idempresa")));
-            if(empresa != null){
-                convocatoria.setEmpresa(empresa);
-                convocatoria = convocatoriaService.save(convocatoria);
-            }
+        Ubicacion ubicacion = new Ubicacion();
+        
+        ubicacion.setDepartamento(objeto.get("departamento"));
+        ubicacion.setProvincia(objeto.get("provincia"));
+        ubicacion.setDistrito(objeto.get("distrito"));
+        ubicacion.setPais("Peru");
+
+        if(ubicacionServicio.existsByPaisAndDepartamentoAndProvinciaAndDistrito(ubicacion)){
+            
+            ubicacionReturn = ubicacionServicio.findByPaisAndDepartamentoAndProvinciaAndDistrito(ubicacion);
+
+
+        }else{
+
+            ubicacionReturn =  ubicacionServicio.save(ubicacion);
+            
+
+        }
+        convocatoria.setUbicacion(ubicacionReturn);
+        usuarioReturn = usuarioService.findById(Integer.parseInt(objeto.get("idempresa")));
+        empresaReturn = empresaService.findByUsuario(usuarioReturn);
+        
+        if(empresaReturn != null){
+            convocatoria.setEmpresa(empresaReturn);
+            convocatoriaReturn = convocatoriaService.save(convocatoria);
         }
 
-        return convocatoria;
+        System.out.println(ubicacionReturn +"           "+empresaReturn + "           " + convocatoriaReturn);
+
+        return convocatoriaReturn;
     }
 
 

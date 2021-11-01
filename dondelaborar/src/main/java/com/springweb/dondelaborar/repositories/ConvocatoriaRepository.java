@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface ConvocatoriaRepository extends JpaRepository<Convocatoria,Integer> {
     
 
-    
     public Convocatoria findById(int id);
     public List<Convocatoria> findByPuestoContainingIgnoreCase(String puesto);
     public List<Convocatoria> findByEmpresa(Empresa empresa);
