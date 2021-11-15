@@ -11,6 +11,8 @@ import com.springweb.dondelaborar.services.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -46,6 +48,23 @@ public class EmpleadoController {
 
 
 
+    
+    @GetMapping("{userid}")
+    public ResponseEntity<Empleado> obtenerEmpleado(@PathVariable("userid") int id){
+
+        Usuario usuario = usuarioService.findById(id);
+        Empleado empleadoReturn = empleadoService.findByUsuario(usuario);
+
+
+        if(empleadoReturn != null)
+            return new ResponseEntity<Empleado>(empleadoReturn,HttpStatus.OK);
+        else    
+            return new ResponseEntity<Empleado>(new Empleado(),HttpStatus.BAD_REQUEST);
+
+    }
+    
+
+
     @PostMapping("/guardar")
     public Empleado guardarPersona(@RequestBody Map<String,String> objeto) throws Exception{
 
@@ -57,6 +76,8 @@ public class EmpleadoController {
                 Usuario usuarioReturn = usuarioService.guardarUsuario( validarCampoUsuario(objeto));
                 Empleado empleado = validarCampoPersona(objeto);
                 empleado.setUsuario(usuarioReturn);
+                System.out.println("se regista el usuario");
+                
                  return empleadoService.guardarEmpleado(empleado);
             }
 
